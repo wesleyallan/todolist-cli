@@ -10,6 +10,8 @@
 </p>
 
 <div align="center">
+  
+https://github.com/wesleyallan/todolist-cli/assets/93749822/76d4b41c-54d6-43ab-94b1-6f5be62742b1
 
 </div>
 
