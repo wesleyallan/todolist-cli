@@ -1,10 +1,9 @@
 import fs from 'fs';
 import { v4 as uuid } from 'uuid';
 
-console.log("[CRUD]");
 const DB_FILE_PATH = './core/db';
 
-type UUID = string;
+export type UUID = string;
 
 interface Todo {
   id: UUID;
@@ -13,7 +12,7 @@ interface Todo {
   done: boolean;
 };
 
-function create(content: string): Todo {
+export function create(content: string): Todo {
   const todo: Todo = {
     id: uuid(),
     date: new Date().toISOString(),
@@ -34,7 +33,7 @@ function create(content: string): Todo {
   return todo;
 }
 
-function read(): Array<Todo> {
+export function read(): Array<Todo> {
   const dbString = fs.readFileSync(DB_FILE_PATH, 'utf-8');
   const db = JSON.parse(dbString || "{}");
   if (!db.todos) return [];
@@ -55,11 +54,15 @@ function update(id: UUID, partialTodo: Partial<Todo>): Todo {
   return todoUpdated;
 };
 
-function updateContentById(id: UUID, content: string): Todo {
+export function updateContentById(id: UUID, content: string): Todo {
   return update(id, {content});
 };
 
-function deleteById(id: UUID) {
+export function updateDoneById(id: UUID, done: boolean): Todo {
+  return update(id, {done});
+}
+
+export function deleteById(id: UUID) {
   const todos = read();
   const todosWithoutOne = todos.filter((currentTodo) => {
     if (currentTodo.id === id) return false;
@@ -72,16 +75,3 @@ function clearDb() {
   fs.writeFileSync(DB_FILE_PATH, "");
 }
 
-// SIMULAÇÃO
-
-clearDb();
-create("Primeira TODO");
-const secondTodo = create("Segunda TODO!");
-deleteById(secondTodo.id);
-const thirdTodo= create("Terceira TODO!");
-update(thirdTodo.id, {
-  content: "Terceira TODO Atualizada!",
-  done: true
-})
-updateContentById(thirdTodo.id, "Terceira TODO duplamente atualizada");
-console.log(read());
